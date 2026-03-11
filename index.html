@@ -34,6 +34,10 @@
             overflow-x: hidden;
         }
 
+        /* Language Toggle Styles */
+        body.lang-en .lang-pt { display: none !important; }
+        body:not(.lang-en) .lang-en { display: none !important; }
+
         .glass {
             background: rgba(15, 23, 42, 0.3);
             backdrop-filter: blur(12px);
@@ -78,6 +82,15 @@
             100% { transform: translate(0, 0) rotate(45deg); }
         }
 
+        @keyframes float-avatar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .animate-float-avatar {
+            animation: float-avatar 6s ease-in-out infinite;
+        }
+
         .animated-rocket {
             position: fixed;
             z-index: 1;
@@ -96,6 +109,27 @@
         .flame {
             transform-origin: top center;
             animation: flame-flicker 0.1s infinite alternate;
+        }
+
+        /* Modal Styles */
+        #projectModal {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        #projectModal.modal-open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #projectModal .modal-content {
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #projectModal.modal-open .modal-content {
+            transform: scale(1) translateY(0);
         }
     </style>
 </head>
@@ -126,37 +160,64 @@
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative">
             <span class="font-extrabold text-2xl tracking-tighter text-white">Diogo<span class="text-brand-500">.</span></span>
             <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-300">
-                <a href="#sobre" class="hover:text-brand-500 transition-colors">Sobre</a>
-                <a href="#experiencia" class="hover:text-brand-500 transition-colors">Experiência</a>
-                <a href="#projetos" class="hover:text-brand-500 transition-colors">Projetos</a>
-                <a href="#formacao" class="hover:text-brand-500 transition-colors">Formação</a>
+                <a href="#sobre" class="hover:text-brand-500 transition-colors">
+                    <span class="lang-pt">Sobre</span><span class="lang-en">About</span>
+                </a>
+                <a href="#experiencia" class="hover:text-brand-500 transition-colors">
+                    <span class="lang-pt">Experiência</span><span class="lang-en">Experience</span>
+                </a>
+                <a href="#projetos" class="hover:text-brand-500 transition-colors">
+                    <span class="lang-pt">Projetos</span><span class="lang-en">Projects</span>
+                </a>
+                <a href="#formacao" class="hover:text-brand-500 transition-colors">
+                    <span class="lang-pt">Formação</span><span class="lang-en">Education</span>
+                </a>
             </div>
-            <a href="#contato" class="bg-brand-500 text-white px-6 py-2.5 rounded-full hover:bg-brand-600 transition-all font-medium shadow-[0_0_15px_rgba(249,115,22,0.4)] hover:shadow-[0_0_25px_rgba(249,115,22,0.6)] hover:-translate-y-0.5">
-                Vamos Conversar
-            </a>
+            <div class="flex items-center gap-4">
+                <button id="langToggle" class="text-xs font-bold text-white glass-card px-3 py-1.5 rounded-full hover:bg-brand-500 transition-colors border border-brand-500/30">
+                    <span class="lang-pt">EN / PT</span><span class="lang-en">PT / EN</span>
+                </button>
+                <a href="#contato" class="hidden sm:inline-block bg-brand-500 text-white px-6 py-2.5 rounded-full hover:bg-brand-600 transition-all font-medium shadow-[0_0_15px_rgba(249,115,22,0.4)] hover:shadow-[0_0_25px_rgba(249,115,22,0.6)] hover:-translate-y-0.5">
+                    <span class="lang-pt">Vamos Conversar</span><span class="lang-en">Let's Talk</span>
+                </a>
+            </div>
         </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-6 pt-40 pb-20 relative z-10">
 
         <section id="sobre" class="mb-32 pt-10 min-h-[70vh] flex flex-col justify-center">
-            <div data-aos="fade-down" data-aos-duration="1000" class="inline-block mb-6 px-4 py-1.5 rounded-full glass-card text-brand-500 text-sm font-semibold tracking-wide border border-brand-500/20 w-fit">
-                🚀 IA, Análise de Dados & Software
-            </div>
-            <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200" class="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
-                Transformando dados <br />
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-orange-300 glow-text">em inteligência.</span>
-            </h1>
-            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400" class="text-xl text-slate-400 leading-relaxed max-w-2xl mb-10 font-light">
-                Olá! Sou o Diogo, graduando em Ciência da Computação (8º semestre). Especialista na automação de fluxos de trabalho usando Python, visão computacional, desenvolvimento Full Stack (Flask) e integração de Inteligência Artificial para resolver desafios complexos de negócios.
-            </p>
-            <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600" class="flex flex-col sm:flex-row gap-4">
-                <a href="#experiencia" class="bg-white text-black px-8 py-4 rounded-full font-bold hover:bg-brand-500 hover:text-white transition-all text-center duration-300 hover:scale-105">
-                    Ver Experiência
-                </a>
-                <a href="#projetos" class="glass-card hover:bg-white/10 text-white px-8 py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2 hover:scale-105">
-                    Meus Projetos no GitHub
-                </a>
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <div class="lg:w-2/3 flex flex-col justify-center items-start">
+                    <div data-aos="fade-down" data-aos-duration="1000" class="inline-block mb-6 px-4 py-1.5 rounded-full glass-card text-brand-500 text-sm font-semibold tracking-wide border border-brand-500/20 w-fit">
+                        <span class="lang-pt">🚀 IA, Análise de Dados & Software</span><span class="lang-en">🚀 AI, Data Analysis & Software</span>
+                    </div>
+                    <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200" class="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
+                        <span class="lang-pt">Transformando dados <br /></span><span class="lang-en">Transforming data <br /></span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-orange-300 glow-text">
+                            <span class="lang-pt">em inteligência.</span><span class="lang-en">into intelligence.</span>
+                        </span>
+                    </h1>
+                    <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400" class="text-xl text-slate-400 leading-relaxed max-w-2xl mb-10 font-light">
+                        <span class="lang-pt">Olá! Sou o Diogo, graduando em Ciência da Computação (8º semestre). Especialista na automação de fluxos de trabalho usando Python, visão computacional, desenvolvimento Full Stack (Flask) e integração de Inteligência Artificial para resolver desafios complexos de negócios.</span>
+                        <span class="lang-en">Hi! I'm Diogo, a Computer Science undergraduate (8th semester). Specialist in workflow automation using Python, computer vision, Full Stack development (Flask), and Artificial Intelligence integration to solve complex business challenges.</span>
+                    </p>
+                    <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600" class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                        <a href="#experiencia" class="bg-white text-black px-8 py-4 rounded-full font-bold hover:bg-brand-500 hover:text-white transition-all text-center duration-300 hover:scale-105">
+                            <span class="lang-pt">Ver Experiência</span><span class="lang-en">View Experience</span>
+                        </a>
+                        <a href="#projetos" class="glass-card hover:bg-white/10 text-white px-8 py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2 hover:scale-105">
+                            <span class="lang-pt">Meus Projetos no GitHub</span><span class="lang-en">My GitHub Projects</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="400" class="lg:w-1/3 flex justify-center w-full mt-12 lg:mt-0">
+                    <div class="relative group cursor-pointer animate-float-avatar">
+                        <div class="absolute inset-0 bg-brand-500/20 rounded-full blur-3xl group-hover:bg-brand-500/40 transition-all duration-500"></div>
+                        <img src="seu%20roto.jpeg" alt="Diogo Borges" class="relative z-10 w-64 h-64 md:w-80 md:h-80 object-cover rounded-full border-4 border-white/10 shadow-[0_0_30px_rgba(249,115,22,0.4)] group-hover:border-brand-500/50 group-hover:shadow-[0_0_50px_rgba(249,115,22,0.6)] transition-all duration-500 filter brightness-110 contrast-125" style="object-position: center 20%;" />
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -166,36 +227,64 @@
 
         <section id="experiencia" class="mb-32">
             <h2 data-aos="fade-right" class="text-3xl font-bold mb-12 flex items-center">
-                <span class="w-12 h-px bg-brand-500 mr-6"></span> Experiência Profissional
+                <span class="w-12 h-px bg-brand-500 mr-6"></span> 
+                <span class="lang-pt">Experiência Profissional</span><span class="lang-en">Professional Experience</span>
             </h2>
 
             <div class="space-y-6 max-w-5xl">
                 <div data-aos="fade-up" data-aos-delay="100" class="glass-card rounded-[2rem] p-8 md:p-10 border-l-4 border-l-brand-500 hover:bg-white/5 transition-all">
                     <div class="flex flex-col md:flex-row justify-between md:items-center mb-6">
                         <div>
-                            <h3 class="text-2xl font-bold text-white mb-1">Estagiário de TI (Foco: BI e Automação)</h3>
+                            <h3 class="text-2xl font-bold text-white mb-1">
+                                <span class="lang-pt">Estagiário de TI (Foco: BI e Automação)</span>
+                                <span class="lang-en">IT Intern (Focus: BI and Automation)</span>
+                            </h3>
                             <p class="text-brand-500 font-semibold text-lg">Dataprev • Brasília, Brasil</p>
                         </div>
-                        <span class="text-slate-400 font-medium px-4 py-1.5 glass-card rounded-full mt-4 md:mt-0 w-fit">Maio 2024 — Presente</span>
+                        <span class="text-slate-400 font-medium px-4 py-1.5 glass-card rounded-full mt-4 md:mt-0 w-fit">
+                            <span class="lang-pt">Maio 2024 — Presente</span>
+                            <span class="lang-en">May 2024 — Present</span>
+                        </span>
                     </div>
                     <ul class="text-slate-300 font-light space-y-3 list-disc list-inside">
-                        <li>Atuação como elo entre DGPS e DGIT, gerenciando demandas para mais de <strong class="text-white font-semibold">50 stakeholders</strong>.</li>
-                        <li>Desenvolvimento de automações Python (Selenium) para extração e ETL, reduzindo o tempo manual em <strong class="text-white font-semibold">40%</strong>.</li>
-                        <li>Criação de <strong class="text-white font-semibold">8+ dashboards</strong> no Power BI, visualizando KPIs de 10.000+ dados para decisão executiva.</li>
+                        <li>
+                            <span class="lang-pt">Atuação como elo entre DGPS e DGIT, gerenciando demandas para mais de <strong class="text-white font-semibold">50 stakeholders</strong>.</span>
+                            <span class="lang-en">Acted as a liaison between DGPS and DGIT, managing demands for over <strong class="text-white font-semibold">50 stakeholders</strong>.</span>
+                        </li>
+                        <li>
+                            <span class="lang-pt">Desenvolvimento de automações Python (Selenium) para extração e ETL, reduzindo o tempo manual em <strong class="text-white font-semibold">40%</strong>.</span>
+                            <span class="lang-en">Developed Python (Selenium) automations for extraction and ETL, reducing manual time by <strong class="text-white font-semibold">40%</strong>.</span>
+                        </li>
+                        <li>
+                            <span class="lang-pt">Criação de <strong class="text-white font-semibold">8+ dashboards</strong> no Power BI, visualizando KPIs de 10.000+ dados para decisão executiva.</span>
+                            <span class="lang-en">Creation of <strong class="text-white font-semibold">8+ dashboards</strong> in Power BI, visualizing KPIs of 10,000+ data points for executive decision making.</span>
+                        </li>
                     </ul>
                 </div>
 
                 <div data-aos="fade-up" data-aos-delay="200" class="glass-card rounded-[2rem] p-8 md:p-10 border-l-4 border-l-slate-600 hover:bg-white/5 transition-all">
                     <div class="flex flex-col md:flex-row justify-between md:items-center mb-6">
                         <div>
-                            <h3 class="text-2xl font-bold text-white mb-1">Especialista de Suporte de TI</h3>
+                            <h3 class="text-2xl font-bold text-white mb-1">
+                                <span class="lang-pt">Especialista de Suporte de TI</span>
+                                <span class="lang-en">IT Support Specialist</span>
+                            </h3>
                             <p class="text-slate-300 font-semibold text-lg">Everest School • Brasília, Brasil</p>
                         </div>
-                        <span class="text-slate-400 font-medium px-4 py-1.5 glass-card rounded-full mt-4 md:mt-0 w-fit">Out. 2023 — Mar. 2024</span>
+                        <span class="text-slate-400 font-medium px-4 py-1.5 glass-card rounded-full mt-4 md:mt-0 w-fit">
+                            <span class="lang-pt">Out. 2023 — Mar. 2024</span>
+                            <span class="lang-en">Oct 2023 — Mar 2024</span>
+                        </span>
                     </div>
                     <ul class="text-slate-400 font-light space-y-3 list-disc list-inside">
-                        <li>Suporte Nível 1 e 2 para 300+ usuários, gerenciando Identidade e Acesso em três unidades.</li>
-                        <li>Resolução de 40+ chamados semanais (hardware/rede) cumprindo os SLAs.</li>
+                        <li>
+                            <span class="lang-pt">Suporte Nível 1 e 2 para 300+ usuários, gerenciando Identidade e Acesso em três unidades.</span>
+                            <span class="lang-en">Tier 1 and 2 support for 300+ users, managing Identity and Access across three units.</span>
+                        </li>
+                        <li>
+                            <span class="lang-pt">Resolução de 40+ chamados semanais (hardware/rede) cumprindo os SLAs.</span>
+                            <span class="lang-en">Resolution of 40+ weekly tickets (hardware/network) meeting SLAs.</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -203,17 +292,27 @@
 
         <section id="projetos" class="mb-32">
             <h2 data-aos="fade-right" class="text-3xl font-bold mb-12 flex items-center">
-                <span class="w-12 h-px bg-brand-500 mr-6"></span> Laboratório de Projetos
+                <span class="w-12 h-px bg-brand-500 mr-6"></span> 
+                <span class="lang-pt">Laboratório de Projetos</span><span class="lang-en">Project Laboratory</span>
             </h2>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                <div data-aos="fade-up" data-aos-delay="100" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col">
+                <div data-aos="fade-up" data-aos-delay="100" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col cursor-pointer hover:-translate-y-2 project-card"
+                     data-title-pt="CondoMóvel (CondoIQ)"
+                     data-title-en="CondoMóvel (CondoIQ)"
+                     data-desc-pt="Sistema web completo para gestão inteligente de condomínios. Criado do zero com painéis administrativos para síndicos, controle de moradores, portaria e módulo financeiro básico. O grande diferencial é a integração IoT direta: o sistema permite abrir portões e catracas fisicamente via web, conectando o banco de dados relacional com o hardware do condomínio."
+                     data-desc-en="Complete web system for smart condominium management. Built from scratch with administrative dashboards for managers, resident control, concierge, and a basic financial module. The main highlight is the direct IoT integration: the system allows opening physical gates and turnstiles via the web, connecting the relational database with the building's hardware."
+                     data-techs="Flask, Python, MySQL, HTML/CSS, IoT / Hardware, Tailwind"
+                     data-link="https://github.com/DigogSXD">
                     <div class="text-brand-500 mb-4 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Full Stack Web & IoT
                     </div>
                     <h3 class="text-xl font-bold mb-3 group-hover:text-brand-500 transition-colors">CondoMóvel (CondoIQ)</h3>
-                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">Sistema web de gestão de condomínios construído do zero. Conta com painéis administrativos, controle de residentes, banco de dados relacional normalizado e integração IoT direta para controle de portões.</p>
+                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">
+                        <span class="lang-pt">Sistema web de gestão de condomínios construído do zero. Conta com painéis administrativos, controle de residentes, banco de dados relacional normalizado e integração IoT direta para controle de portões.</span>
+                        <span class="lang-en">Web system for condominium management built from scratch. Features admin panels, resident control, normalized relational database, and direct IoT integration for gate control.</span>
+                    </p>
                     <div class="flex flex-wrap gap-2">
                         <span class="px-2 py-1 bg-brand-500/20 text-brand-300 text-[10px] rounded-full">Flask (Python)</span>
                         <span class="px-2 py-1 bg-white/5 text-slate-300 text-[10px] rounded-full">MySQL</span>
@@ -221,12 +320,22 @@
                     </div>
                 </div>
 
-                <div data-aos="fade-up" data-aos-delay="200" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col">
+                <div data-aos="fade-up" data-aos-delay="200" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col cursor-pointer hover:-translate-y-2 project-card"
+                     data-title-pt="AI Viral Clip Generator"
+                     data-title-en="AI Viral Clip Generator"
+                     data-desc-pt="Uma ferramenta poderosa que automatiza a criação de conteúdo viral. O sistema faz o download de um vídeo longo do YouTube, extrai o áudio, e utiliza o modelo de transcrição neural OpenAI Whisper. Em seguida, os textos são enviados para a API do Google Gemini, que analisa o contexto e recorta os momentos de maior retenção/impacto. Por fim, o script gera vídeos no formato vertical (Shorts/TikTok) renderizando legendas dinâmicas perfeitamente sincronizadas."
+                     data-desc-en="A powerful tool that automates viral content creation. The system downloads a long YouTube video, extracts the audio, and uses the OpenAI Whisper neural transcription model. Then, the texts are sent to the Google Gemini API, which analyzes context and clips the moments with the highest retention/impact. Finally, the script generates vertical videos (Shorts/TikTok) rendering perfectly synchronized dynamic subtitles."
+                     data-techs="Python, Gemini API, Whisper AI, FFmpeg, MoviePy"
+                     data-link="https://github.com/DigogSXD">
                     <div class="text-brand-500 mb-4 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Inteligência Artificial
+                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> 
+                        <span class="lang-pt">Inteligência Artificial</span><span class="lang-en">Artificial Intelligence</span>
                     </div>
                     <h3 class="text-xl font-bold mb-3 group-hover:text-brand-500 transition-colors">AI Viral Clip Generator</h3>
-                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">Ferramenta automatizada que processa vídeos do YouTube, utiliza a IA Whisper para transcrição e o Google Gemini para selecionar cortes virais, gerando vídeos para TikTok/Shorts com legendas dinâmicas.</p>
+                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">
+                        <span class="lang-pt">Ferramenta automatizada que processa vídeos do YouTube, utiliza a IA Whisper para transcrição e o Google Gemini para selecionar cortes virais, gerando vídeos para TikTok/Shorts com legendas dinâmicas.</span>
+                        <span class="lang-en">Automated tool that processes YouTube videos, uses Whisper AI for transcription, and Google Gemini to select viral clips, generating TikTok/Shorts videos with dynamic subtitles.</span>
+                    </p>
                     <div class="flex flex-wrap gap-2">
                         <span class="px-2 py-1 bg-brand-500/20 text-brand-300 text-[10px] rounded-full">Python</span>
                         <span class="px-2 py-1 bg-white/5 text-slate-300 text-[10px] rounded-full">Gemini API</span>
@@ -234,12 +343,22 @@
                     </div>
                 </div>
 
-                <div data-aos="fade-up" data-aos-delay="300" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col">
+                <div data-aos="fade-up" data-aos-delay="300" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col cursor-pointer hover:-translate-y-2 project-card"
+                     data-title-pt="Smart Gate AI (LPR System)"
+                     data-title-en="Smart Gate AI (LPR System)"
+                     data-desc-pt="Sistema de controle de acesso baseado em Visão Computacional profunda. Utiliza OCR (Optical Character Recognition) para identificar e ler placas de veículos em tempo real a partir de câmeras IP. É totalmente compatível tanto com o padrão Mercosul quanto com as placas antigas. O software processa os frames, realiza o matching com um banco de dados de moradores autorizados e aciona o relé do portão, tudo desenhando caixas delimitadoras (bounding boxes) na interface gráfica de monitoramento."
+                     data-desc-en="Access control system based on deep Computer Vision. Uses OCR (Optical Character Recognition) to identify and read vehicle license plates in real-time from IP cameras. It is fully compatible with both the Mercosur standard and old plates. The software processes the frames, matches them with an authorized resident database, and triggers the gate relay, while drawing bounding boxes on the monitoring graphical interface."
+                     data-techs="Python, OpenCV, EasyOCR, Deep Learning, PyQt/Tkinter"
+                     data-link="https://github.com/DigogSXD">
                     <div class="text-brand-500 mb-4 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Visão Computacional
+                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> 
+                        <span class="lang-pt">Visão Computacional</span><span class="lang-en">Computer Vision</span>
                     </div>
                     <h3 class="text-xl font-bold mb-3 group-hover:text-brand-500 transition-colors">Smart Gate AI (LPR)</h3>
-                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">Sistema de controle de acesso usando OCR. Identifica placas de veículos em imagens (Padrão Mercosul e Antigo) e cruza com um banco de dados para liberar a entrada com bounding boxes visuais na interface.</p>
+                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">
+                        <span class="lang-pt">Sistema de controle de acesso usando OCR. Identifica placas de veículos em imagens (Padrão Mercosul e Antigo) e cruza com um banco de dados para liberar a entrada com bounding boxes visuais na interface.</span>
+                        <span class="lang-en">Access control system using OCR. Identifies vehicle license plates in images (Mercosul and Old standards) and cross-references them with a database to grant entry with visual bounding boxes on the interface.</span>
+                    </p>
                     <div class="flex flex-wrap gap-2">
                         <span class="px-2 py-1 bg-brand-500/20 text-brand-300 text-[10px] rounded-full">EasyOCR</span>
                         <span class="px-2 py-1 bg-white/5 text-slate-300 text-[10px] rounded-full">OpenCV</span>
@@ -247,12 +366,21 @@
                     </div>
                 </div>
 
-                <div data-aos="fade-up" data-aos-delay="400" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col">
+                <div data-aos="fade-up" data-aos-delay="400" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col cursor-pointer hover:-translate-y-2 project-card"
+                     data-title-pt="Tuya Gate & Camera Controller"
+                     data-title-en="Tuya Gate & Camera Controller"
+                     data-desc-pt="Solução centralizada para gerenciar dispositivos IoT do ecossistema inteligente Tuya. O projeto consiste em um servidor web Flask que ignora as limitações geográficas oficiais, comunicando-se diretamente com APIs de hardware. Ele oferece uma interface administrativa que exibe feeds de câmera em tempo real (via conversão MJPEG) e botões para acionar relés de forma segura. Toda a arquitetura foi desenhada seguindo os princípios RESTful, protegida por tokens JWT iterativos em cada requisição mobile/web."
+                     data-desc-en="Centralized solution to manage IoT devices from the Tuya smart ecosystem. The project consists of a Flask web server that bypasses official geographic limitations by communicating directly with hardware APIs. It provides an administrative interface that displays real-time camera feeds (via MJPEG conversion) and buttons to securely trigger relays. The entire architecture was designed following RESTful principles, protected by immersive JWT tokens on every mobile/web request."
+                     data-techs="Flask, Python, Tuya IoT API, JWT, WebSockets"
+                     data-link="https://github.com/DigogSXD">
                     <div class="text-brand-500 mb-4 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> IoT & Full Stack
                     </div>
                     <h3 class="text-xl font-bold mb-3 group-hover:text-brand-500 transition-colors">Tuya Gate & Camera Controller</h3>
-                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">Servidor web com painel para controle de dispositivos Tuya. Oferece visualização de câmeras (MJPEG) e relés, provendo uma API RESTful segura com JWT para integração mobile.</p>
+                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">
+                        <span class="lang-pt">Servidor web com painel para controle de dispositivos Tuya. Oferece visualização de câmeras (MJPEG) e relés, provendo uma API RESTful segura com JWT para integração mobile.</span>
+                        <span class="lang-en">Web server with a panel for controlling Tuya devices. Offers camera viewing (MJPEG) and relays, providing a secure RESTful API with JWT for mobile integration.</span>
+                    </p>
                     <div class="flex flex-wrap gap-2">
                         <span class="px-2 py-1 bg-brand-500/20 text-brand-300 text-[10px] rounded-full">Flask</span>
                         <span class="px-2 py-1 bg-white/5 text-slate-300 text-[10px] rounded-full">Tuya API</span>
@@ -260,12 +388,22 @@
                     </div>
                 </div>
 
-                <div data-aos="fade-up" data-aos-delay="500" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col">
+                <div data-aos="fade-up" data-aos-delay="500" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col cursor-pointer hover:-translate-y-2 project-card"
+                     data-title-pt="CleanMaster License System"
+                     data-title-en="CleanMaster License System"
+                     data-desc-pt="Módulo backend independente criado para distribuir e gerenciar chaves de ativação de softwares de terceiros. Desenvolvido para suprir demandas de monetização de aplicações desktop. Possui um complexo esquema de banco de dados (MySQL) para controlar limites mensais, bans de hardware (HWID UUID lock) e datas de expiração. O painel inclui gráficos analíticos para observar a conversão de contas gratuitas para planos premium, com hashing rigoroso (Werkzeug/Bcrypt) para as senhas de clientes."
+                     data-desc-en="Independent backend module created to distribute and manage activation keys for third-party software. Developed to meet monetization demands for desktop applications. It features a complex database schema (MySQL) to control monthly limits, hardware bans (HWID UUID lock), and expiration dates. The dashboard includes analytical charts to observe the conversion of free accounts to premium plans, with strict hashing (Werkzeug/Bcrypt) for client passwords."
+                     data-techs="Python, MySQL, Werkzeug Security, Flask, Bootstrap"
+                     data-link="https://github.com/DigogSXD">
                     <div class="text-brand-500 mb-4 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Backend & Arquitetura
+                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> 
+                        <span class="lang-pt">Backend & Arquitetura</span><span class="lang-en">Backend & Architecture</span>
                     </div>
                     <h3 class="text-xl font-bold mb-3 group-hover:text-brand-500 transition-colors">CleanMaster License System</h3>
-                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">Sistema de gerenciamento de chaves de software. Conta com CRUD completo de usuários, hash de senhas, lógica de upgrade de contas Free para Premium e dashboard analítico administrativo.</p>
+                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">
+                        <span class="lang-pt">Sistema de gerenciamento de chaves de software. Conta com CRUD completo de usuários, hash de senhas, lógica de upgrade de contas Free para Premium e dashboard analítico administrativo.</span>
+                        <span class="lang-en">Software license management system. Includes a complete user CRUD, password hashing, Free to Premium account upgrade logic, and an administrative analytical dashboard.</span>
+                    </p>
                     <div class="flex flex-wrap gap-2">
                         <span class="px-2 py-1 bg-brand-500/20 text-brand-300 text-[10px] rounded-full">Python</span>
                         <span class="px-2 py-1 bg-white/5 text-slate-300 text-[10px] rounded-full">MySQL</span>
@@ -273,12 +411,22 @@
                     </div>
                 </div>
 
-                <div data-aos="fade-up" data-aos-delay="600" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col">
+                <div data-aos="fade-up" data-aos-delay="600" class="group glass-card hover-glow rounded-[2rem] p-6 transition-all duration-500 relative flex flex-col cursor-pointer hover:-translate-y-2 project-card"
+                     data-title-pt="PyTorch Deep Learning Lab"
+                     data-title-en="PyTorch Deep Learning Lab"
+                     data-desc-pt="Repositório laboratório focado inteiramente na pesquisa e estudo de Deep Learning usando a framework PyTorch do Facebook. Nele existem scripts treinando pesadamente redes neurais convolucionais (CNNs) para executar com precisão altíssima a identificação de dígitos e vestuário (datasets MNIST e FashionMNIST simultâneos). Também implementei a técnica avançada de Data Augmentation MixUp, para evitar overfitting, culminando no treinamento de uma DCGAN experimental que aprende a gerar imagens falsas similares as de treinamento."
+                     data-desc-en="Laboratory repository focused entirely on researching and studying Deep Learning using Facebook's PyTorch framework. It contains scripts heavily training Convolutional Neural Networks (CNNs) to identify digits and clothing (simultaneous MNIST and FashionMNIST datasets) with ultra-high accuracy. I also implemented the advanced MixUp Data Augmentation technique to avoid overfitting, culminating in the training of an experimental DCGAN that learns to generate fake images similar to the training ones."
+                     data-techs="PyTorch, NumPy, Matplotlib, Convolutional NNs, DCGAN"
+                     data-link="https://github.com/DigogSXD">
                     <div class="text-brand-500 mb-4 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Redes Neurais
+                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> 
+                        <span class="lang-pt">Redes Neurais</span><span class="lang-en">Neural Networks</span>
                     </div>
                     <h3 class="text-xl font-bold mb-3 group-hover:text-brand-500 transition-colors">PyTorch Deep Learning Lab</h3>
-                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">Implementações complexas envolvendo classificação multiclasse (FashionMNIST e MNIST simultaneamente), técnica de Data Augmentation MixUp e criação de DCGANs (Redes Geradoras Adversariais).</p>
+                    <p class="text-slate-400 mb-6 text-sm leading-relaxed font-light flex-grow">
+                        <span class="lang-pt">Implementações complexas envolvendo classificação multiclasse (FashionMNIST e MNIST simultaneamente), técnica de Data Augmentation MixUp e criação de DCGANs (Redes Geradoras Adversariais).</span>
+                        <span class="lang-en">Complex implementations involving multiclass classification (FashionMNIST and MNIST simultaneously), Data Augmentation technique MixUp, and creation of DCGANs (Deep Convolutional Generative Adversarial Networks).</span>
+                    </p>
                     <div class="flex flex-wrap gap-2">
                         <span class="px-2 py-1 bg-brand-500/20 text-brand-300 text-[10px] rounded-full">PyTorch</span>
                         <span class="px-2 py-1 bg-white/5 text-slate-300 text-[10px] rounded-full">DCGAN</span>
@@ -291,32 +439,55 @@
 
         <section id="formacao" class="mb-32">
             <h2 data-aos="fade-right" class="text-3xl font-bold mb-12 flex items-center">
-                <span class="w-12 h-px bg-brand-500 mr-6"></span> Formação Acadêmica
+                <span class="w-12 h-px bg-brand-500 mr-6"></span> 
+                <span class="lang-pt">Formação Acadêmica</span><span class="lang-en">Academic Background</span>
             </h2>
 
             <div data-aos="zoom-in" class="glass-card rounded-[2rem] p-8 border-t-2 border-t-brand-500 hover:scale-[1.02] transition-transform mb-12">
                 <h3 class="text-2xl font-bold text-white mb-2">Centro Universitário de Brasília (UniCEUB)</h3>
-                <p class="text-brand-500 font-semibold mb-4">Bacharelado em Ciência da Computação (8º Semestre) <span class="text-slate-400 font-normal ml-2">• Ago. 2022 — Presente</span></p>
-                <p class="text-slate-400 font-light">Principais disciplinas: Banco de Dados, Estrutura de Dados, Programação Python e Análise de Sistemas.</p>
+                <p class="text-brand-500 font-semibold mb-4">
+                    <span class="lang-pt">Bacharelado em Ciência da Computação (8º Semestre)</span>
+                    <span class="lang-en">Bachelor of Computer Science (8th Semester)</span>
+                    <span class="text-slate-400 font-normal ml-2">• 
+                        <span class="lang-pt">Ago. 2022 — Presente</span>
+                        <span class="lang-en">Aug 2022 — Present</span>
+                    </span>
+                </p>
+                <p class="text-slate-400 font-light">
+                    <span class="lang-pt">Principais disciplinas: Banco de Dados, Estrutura de Dados, Programação Python e Análise de Sistemas.</span>
+                    <span class="lang-en">Core courses: Database Systems, Data Structures, Python Programming, and Systems Analysis.</span>
+                </p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6 mb-12">
                 <div data-aos="zoom-in" data-aos-delay="0" class="glass-card rounded-[2rem] p-8 text-center border-t-2 border-t-brand-500 hover:scale-105 transition-transform">
                     <div class="text-5xl font-black text-brand-500 mb-2 glow-text">+55</div>
-                    <div class="text-slate-300 font-semibold mb-2">Cursos Concluídos</div>
-                    <p class="text-xs text-slate-500">Certificações na Alura e outras</p>
+                    <div class="text-slate-300 font-semibold mb-2">
+                        <span class="lang-pt">Cursos Concluídos</span><span class="lang-en">Completed Courses</span>
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        <span class="lang-pt">Certificações na Alura e outras</span><span class="lang-en">Certifications at Alura and others</span>
+                    </p>
                 </div>
                 
                 <div data-aos="zoom-in" data-aos-delay="150" class="glass-card rounded-[2rem] p-8 text-center border-t-2 border-t-brand-500 hover:scale-105 transition-transform">
                     <div class="text-5xl font-black text-brand-500 mb-2 glow-text">+400</div>
-                    <div class="text-slate-300 font-semibold mb-2">Horas de Estudo</div>
-                    <p class="text-xs text-slate-500">Prática e teoria avançada</p>
+                    <div class="text-slate-300 font-semibold mb-2">
+                        <span class="lang-pt">Horas de Estudo</span><span class="lang-en">Study Hours</span>
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        <span class="lang-pt">Prática e teoria avançada</span><span class="lang-en">Advanced practice and theory</span>
+                    </p>
                 </div>
                 
                 <div data-aos="zoom-in" data-aos-delay="300" class="glass-card rounded-[2rem] p-8 text-center border-t-2 border-t-brand-500 hover:scale-105 transition-transform">
                     <div class="text-5xl font-black text-brand-500 mb-2 glow-text">100%</div>
-                    <div class="text-slate-300 font-semibold mb-2">Foco e Prática</div>
-                    <p class="text-xs text-slate-500">Aprendizado contínuo</p>
+                    <div class="text-slate-300 font-semibold mb-2">
+                        <span class="lang-pt">Foco e Prática</span><span class="lang-en">Focus and Practice</span>
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        <span class="lang-pt">Aprendizado contínuo</span><span class="lang-en">Continuous learning</span>
+                    </p>
                 </div>
             </div>
 
@@ -324,8 +495,12 @@
                 <div class="absolute top-0 right-0 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
                 
                 <div class="flex justify-between items-end mb-8 relative z-10 border-b border-white/10 pb-4">
-                    <h3 class="text-2xl font-bold text-white">Especializações Principais</h3>
-                    <a href="https://drive.google.com/drive/folders/17AgSi58JTEALwGKY9rOIFwvL_AFU-IkX?usp=drive_link" target="_blank" class="text-sm text-brand-500 hover:text-white transition-colors underline underline-offset-4 hidden sm:block">Ver originais no Drive</a>
+                    <h3 class="text-2xl font-bold text-white">
+                        <span class="lang-pt">Especializações Principais</span><span class="lang-en">Main Specializations</span>
+                    </h3>
+                    <a href="https://drive.google.com/drive/folders/17AgSi58JTEALwGKY9rOIFwvL_AFU-IkX?usp=drive_link" target="_blank" class="text-sm text-brand-500 hover:text-white transition-colors underline underline-offset-4 hidden sm:block">
+                        <span class="lang-pt">Ver originais no Drive</span><span class="lang-en">View originals on Drive</span>
+                    </a>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-x-12 gap-y-8 relative z-10">
@@ -334,8 +509,13 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                         </div>
                         <div>
-                            <h4 class="font-bold text-slate-200">Análise de Dados & IA</h4>
-                            <p class="text-sm text-slate-400 mt-1">Domínio em Python (Pandas, PyTorch, Scikit-learn, OpenCV), LLMs (Gemini API, Whisper) e Power BI.</p>
+                            <h4 class="font-bold text-slate-200">
+                                <span class="lang-pt">Análise de Dados & IA</span><span class="lang-en">Data Analysis & AI</span>
+                            </h4>
+                            <p class="text-sm text-slate-400 mt-1">
+                                <span class="lang-pt">Domínio em Python (Pandas, PyTorch, Scikit-learn, OpenCV), LLMs (Gemini API, Whisper) e Power BI.</span>
+                                <span class="lang-en">Expertise in Python (Pandas, PyTorch, Scikit-learn, OpenCV), LLMs (Gemini API, Whisper), and Power BI.</span>
+                            </p>
                         </div>
                     </div>
 
@@ -344,8 +524,13 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
                         </div>
                         <div>
-                            <h4 class="font-bold text-slate-200">Engenharia Back-end</h4>
-                            <p class="text-sm text-slate-400 mt-1">Flask e Spring Boot 3. Construção de APIs seguras (JWT), criptografia e integrações IoT (Tuya).</p>
+                            <h4 class="font-bold text-slate-200">
+                                <span class="lang-pt">Engenharia Back-end</span><span class="lang-en">Back-end Engineering</span>
+                            </h4>
+                            <p class="text-sm text-slate-400 mt-1">
+                                <span class="lang-pt">Flask e Spring Boot 3. Construção de APIs seguras (JWT), criptografia e integrações IoT (Tuya).</span>
+                                <span class="lang-en">Flask and Spring Boot 3. Building secure APIs (JWT), cryptography, and IoT integrations (Tuya).</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -359,16 +544,21 @@
                 <div class="absolute bottom-0 left-0 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
 
                 <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white text-balance leading-tight">
-                    Vamos desenvolver a sua <br />
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">próxima grande ideia?</span>
+                    <span class="lang-pt">Vamos desenvolver a sua <br /></span><span class="lang-en">Let's develop your <br /></span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">
+                        <span class="lang-pt">próxima grande ideia?</span><span class="lang-en">next big idea?</span>
+                    </span>
                 </h2>
-                <p class="text-slate-400 mb-10 text-lg max-w-xl mx-auto font-light">Com as tecnologias certas, tudo é possível. Estou aberto a novos desafios em Engenharia de Software e IA.</p>
+                <p class="text-slate-400 mb-10 text-lg max-w-xl mx-auto font-light">
+                    <span class="lang-pt">Com as tecnologias certas, tudo é possível. Estou aberto a novos desafios em Engenharia de Software e IA.</span>
+                    <span class="lang-en">With the right technologies, everything is possible. I'm open to new challenges in Software Engineering and AI.</span>
+                </p>
                 
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
                     <a href="mailto:diogodbm9@gmail.com"
                         class="inline-flex items-center gap-3 bg-brand-500 text-white px-10 py-5 rounded-full font-bold hover:bg-white hover:text-black transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(255,255,255,0.6)] transform hover:-translate-y-1 hover:scale-105">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        Enviar Email
+                        <span class="lang-pt">Enviar Email</span><span class="lang-en">Send Email</span>
                     </a>
                     
                     <div class="flex gap-4">
@@ -380,14 +570,58 @@
                         </a>
                     </div>
                 </div>
-                <p class="text-slate-500 mt-8 text-sm">📞 (61) 9 9648-8307</p>
+                <a href="https://wa.me/5561996488307" target="_blank" class="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-8 py-4 rounded-full text-slate-300 hover:text-white hover:bg-green-600 hover:border-green-500 mt-8 text-lg font-medium transition-all duration-300 shadow-lg hover:shadow-[0_0_30px_rgba(22,163,74,0.6)] transform hover:-translate-y-1 hover:scale-105 group">
+                    <svg class="w-6 h-6 group-hover:animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.88-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.347-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    (61) 9 9648-8307
+                </a>
             </div>
         </section>
 
     </main>
 
+    <!-- Modal Layout Container -->
+    <div id="projectModal" class="fixed inset-0 z-[100] flex items-center justify-center px-4 py-6 sm:p-0">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity" id="modalBackdrop"></div>
+        
+        <!-- Modal Content Box -->
+        <div class="modal-content relative bg-slate-800/90 border border-brand-500/30 shadow-[0_0_40px_rgba(249,115,22,0.15)] rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto z-10 p-8 sm:p-10">
+            <!-- Close Button -->
+            <button id="closeModalBtn" class="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-brand-500 transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <div class="text-brand-500 mb-3 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> 
+                <span class="lang-pt">Detalhes do Projeto</span><span class="lang-en">Project Details</span>
+            </div>
+            
+            <h3 id="modalTitle" class="text-3xl font-extrabold text-white mb-6 pr-12">Project Title</h3>
+            
+            <p id="modalDesc" class="text-slate-300 leading-relaxed font-light mb-8 text-lg">
+                Project detailed description will appear here...
+            </p>
+            
+            <div class="mb-8">
+                <h4 class="text-sm text-slate-400 mb-3 font-semibold uppercase tracking-wider">
+                    <span class="lang-pt">Tecnologias Utilizadas</span><span class="lang-en">Technologies Used</span>
+                </h4>
+                <div id="modalTechs" class="flex flex-wrap gap-2">
+                    <!-- Tech badges will be injected here -->
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 mt-4">
+                <a id="modalLink" href="#" target="_blank" class="inline-flex items-center justify-center w-full sm:w-auto gap-3 bg-brand-500 text-white px-8 py-3.5 rounded-full font-bold hover:bg-white hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(249,115,22,0.4)]">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path></svg>
+                    <span class="lang-pt">Ver Código Fonte</span><span class="lang-en">View Source Code</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <footer class="text-center py-8 text-slate-500 text-sm font-light relative z-10 mt-20 border-t border-white/10 glass">
-        &copy; <span id="year"></span> — Construído com muita criatividade. Pronto para deploy.
+        &copy; <span id="year"></span> — <span class="lang-pt">Construído com muita criatividade. Pronto para deploy.</span><span class="lang-en">Built with much creativity. Ready to deploy.</span>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -443,6 +677,103 @@
             if (window.scrollY > 50) { nav.classList.add('bg-slate-900/60', 'backdrop-blur-md'); nav.classList.remove('bg-transparent'); } 
             else { nav.classList.add('bg-transparent'); nav.classList.remove('bg-slate-900/60', 'backdrop-blur-md'); }
         });
+
+        // Language Toggle Logic
+        const langToggleBtn = document.getElementById('langToggle');
+        const setLanguage = (lang) => {
+            if (lang === 'en') {
+                document.body.classList.add('lang-en');
+            } else {
+                document.body.classList.remove('lang-en');
+            }
+            localStorage.setItem('preferredLang', lang);
+        };
+
+        langToggleBtn.addEventListener('click', () => {
+            const isEn = document.body.classList.contains('lang-en');
+            setLanguage(isEn ? 'pt' : 'en');
+        });
+
+        // Initialize from local storage or default to PT
+        const savedLang = localStorage.getItem('preferredLang');
+        if (savedLang === 'en') {
+            setLanguage('en');
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('projectModal');
+        const modalBackdrop = document.getElementById('modalBackdrop');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const projectCards = document.querySelectorAll('.project-card');
+        
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
+        const modalTechs = document.getElementById('modalTechs');
+        const modalLink = document.getElementById('modalLink');
+
+        function openModal(card) {
+            const isEn = document.body.classList.contains('lang-en');
+            
+            // Extract data
+            const titlePt = card.getAttribute('data-title-pt');
+            const titleEn = card.getAttribute('data-title-en');
+            const descPt = card.getAttribute('data-desc-pt');
+            const descEn = card.getAttribute('data-desc-en');
+            const techsString = card.getAttribute('data-techs');
+            const link = card.getAttribute('data-link');
+
+            // Populate HTML with PT/EN spans
+            modalTitle.innerHTML = `<span class="lang-pt">${titlePt}</span><span class="lang-en">${titleEn}</span>`;
+            modalDesc.innerHTML = `<span class="lang-pt">${descPt}</span><span class="lang-en">${descEn}</span>`;
+            
+            // Populate Tags
+            modalTechs.innerHTML = '';
+            if (techsString) {
+                const techs = techsString.split(',');
+                techs.forEach(tech => {
+                    const span = document.createElement('span');
+                    span.className = 'px-3 py-1.5 bg-white/5 border border-white/10 text-slate-300 text-xs rounded-full font-mono';
+                    span.textContent = tech.trim();
+                    modalTechs.appendChild(span);
+                });
+            }
+
+            // Populate Link
+            if (link) {
+                modalLink.href = link;
+                modalLink.style.display = 'inline-flex';
+            } else {
+                modalLink.style.display = 'none';
+            }
+
+            // Show Modal (prevent body scroll)
+            document.body.style.overflow = 'hidden';
+            modal.classList.add('modal-open');
+        }
+
+        function closeModal() {
+            modal.classList.remove('modal-open');
+            // Wait for transition before restoring scroll
+            setTimeout(() => {
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        // Event Listeners
+        projectCards.forEach(card => {
+            card.addEventListener('click', () => openModal(card));
+        });
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modalBackdrop.addEventListener('click', closeModal);
+        
+        // Close on 'Escape' key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('modal-open')) {
+                closeModal();
+            }
+        });
+
     </script>
 </body>
 </html>
